@@ -3,6 +3,7 @@
 //
 #include <random>
 #include <algorithm>
+#include <ctime>
 
 #include "card.h"
 
