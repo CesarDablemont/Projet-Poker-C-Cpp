@@ -18,7 +18,6 @@ void display_game(Game myGame)
 
 void display_hand(std::vector<Card *> hand)
 {
-    std::cout << "hand: ";
     for (Card *i : hand)
         std::cout << i->to_string() << ' ';
     std::cout << std::endl;
@@ -89,21 +88,26 @@ void test_best_hand()
     hand.push_back(new Card(Card::CINQ, Card::COEUR));
 
     std::vector<Card *> hand2;
-    hand.push_back(new Card(Card::UN, Card::COEUR));
-    hand.push_back(new Card(Card::DEUX, Card::COEUR));
-    hand.push_back(new Card(Card::TROIS, Card::COEUR));
-    hand.push_back(new Card(Card::QUATRE, Card::COEUR));
-    hand.push_back(new Card(Card::SIX, Card::TREFLE));
+    hand2.push_back(new Card(Card::UN, Card::COEUR));
+    hand2.push_back(new Card(Card::DEUX, Card::COEUR));
+    hand2.push_back(new Card(Card::TROIS, Card::COEUR));
+    hand2.push_back(new Card(Card::QUATRE, Card::COEUR));
+    hand2.push_back(new Card(Card::SIX, Card::TREFLE));
 
     std::cout << "Debut des test." << std::endl;
+    std::cout << "Hand 1: ";
+    display_hand(hand);
+    std::cout << "Hand 2: ";
+    display_hand(hand2);
 
-    if (couleur(hand) != true)
+    if (!couleur(hand) == true)
         std::cout << "Echec du test de la 1e couleur." << std::endl;
-    if (sequence(hand) != true)
-        std::cout << "Echec du test de la 1e suite." << std::endl;
-    if (couleur(hand2) != false)
+    if (!couleur(hand2) == false)
         std::cout << "Echec du test de la 2e couleur." << std::endl;
-    if (sequence(hand2) != false)
+
+    if (!sequence(hand) == true)
+        std::cout << "Echec du test de la 1e suite." << std::endl;
+    if (!sequence(hand2) == false)
         std::cout << "Echec du test de la 2e suite." << std::endl;
 
     for (Card *i : hand)
@@ -124,21 +128,21 @@ int main()
     // std::cout << "value: " << c1.get_value() << ", color: " << c1.get_color() << std::endl;
     // std::cout << "value: " << c1.get_value() << ", color: " << c1.colors[c1.get_color()] << std::endl;
 
-    // init the game
+    // Lancer le jeu
     Game myGame;
-    display_game(myGame);
+    // display_game(myGame);
 
-    // Shuffle the deck
+    // Mélanger le jeu
     myGame.shuffe();
-    display_game(myGame);
+    // display_game(myGame);
 
+    // Crée une main et y ajouter les 5 premiere carte du jeu
     std::vector<Card *> hand;
     for (int i = 0; i < 5; i++)
-    { // ajouter les 5 premiere carte du jeu a la main
+    {
         hand.push_back(&myGame.game[i]);
     }
-
-    display_hand(hand);
+    // display_hand(hand);
 
     test_best_hand();
 
