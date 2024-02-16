@@ -19,7 +19,7 @@ int main()
     std::vector<Card *> hand;
     hand.push_back(new Card(Card::UN, Card::COEUR));
     hand.push_back(new Card(Card::DEUX, Card::COEUR));
-    hand.push_back(new Card(Card::DEUX, Card::COEUR));
+    hand.push_back(new Card(Card::DEUX, Card::TREFLE));
     hand.push_back(new Card(Card::TROIS, Card::COEUR));
     hand.push_back(new Card(Card::QUATRE, Card::COEUR));
 
