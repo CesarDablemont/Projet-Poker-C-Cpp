@@ -95,10 +95,10 @@ void test_best_hand()
     hand2.push_back(new Card(Card::SIX, Card::TREFLE));
 
     std::cout << "Debut des test." << std::endl;
-    std::cout << "Hand 1: ";
-    display_hand(hand);
-    std::cout << "Hand 2: ";
-    display_hand(hand2);
+    // std::cout << "Hand 1: ";
+    // display_hand(hand);
+    // std::cout << "Hand 2: ";
+    // display_hand(hand2);
 
     if (!couleur(hand) == true)
         std::cout << "Echec du test de la 1e couleur." << std::endl;
