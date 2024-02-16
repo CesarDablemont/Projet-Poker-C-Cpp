@@ -58,7 +58,8 @@ bool sequence(std::vector<Card *> hand)
     hand.begin();
     for (Card *i : hand)
     {
-        if (i->get_value() != hand[i - 1]->get_value() + 1)
+        //probleme :/
+        if (i->get_value() != hand[0] -> get_value() + 1)
         {
             return true;
         }
