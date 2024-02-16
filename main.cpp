@@ -31,7 +31,7 @@ bool has_pair(std::vector<Card *> hand)
 {
 }
 
-bool couleur(const std::vector<Card> &hand)
+bool couleur(std::vector<Card *> hand)
 {
 
     if (hand.empty())
@@ -41,10 +41,10 @@ bool couleur(const std::vector<Card> &hand)
 
     hand.begin();
 
-    for (const Card &other : hand)
+    for (Card *i : hand)
     {
 
-        if (hand.Card.COLOR != hand.begin()) {
+        if (hand.colors != hand.begin()) {
             return false;
         }
     }
@@ -76,31 +76,23 @@ int main()
 
     std::vector<Card *> hand;
     for (int i = 0; i < 5; i++)
-    {
-        // hand.push_back(myGame.game[i]);
+    { // ajouter les 5 premiere carte du jeu a la main
+        hand.push_back(&myGame.game[i]);
     }
-    // hand.push_back(new Card(Card::UN, Card::COEUR));
-    // hand.push_back(new Card(Card::DEUX, Card::COEUR));
-    // hand.push_back(new Card(Card::DEUX, Card::TREFLE));
-    // hand.push_back(new Card(Card::TROIS, Card::COEUR));
-    // hand.push_back(new Card(Card::QUATRE, Card::COEUR));
+
     display_hand(hand);
 
     best_hand(hand);
 
-    // Ne pas oublier de libere la memoire
-    for (Card *i : hand)
-        delete i;
-
-    std::cout << "This is the end, just ..." << std::endl;
-
-    std::vector<Card> deck = {Card(Card:: PIQUE), Card(Card::PIQUE), Card(Card::PIQUE),Card(Card::PIQUE),Card(Card::PIQUE)};
-
-    if (couleur(deck)) {
+    if (couleur(hand)) {
         std::cout << "Toutes les cartes ont la meme couleur." << std::endl;
     } else {
         std::cout << "Les cartes n'ont pas la meme couleur." << std::endl;
     }
+
+    // Ne pas oublier de libere la memoire
+    for (Card *i : hand)
+        delete i;
 
     return 0;
 }
