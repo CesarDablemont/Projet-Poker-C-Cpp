@@ -20,6 +20,12 @@ void display_game(Game myGame)
 
 void display_hand(std::vector<Card *> hand)
 {
+    if (hand.empty())
+    {
+        std::cout << "Empty hand" << std::endl;
+        return;
+    }
+
     for (Card *i : hand)
         std::cout << i->to_string() << ' ';
     std::cout << std::endl;
@@ -31,16 +37,11 @@ void display_hand(std::vector<Card *> hand)
 *************************************************************************** */
 #pragma region
 
-bool compareByValue(const Card *card1, const Card *card2)
-{
-    return card1->get_value() < card2->get_value();
-}
-
 bool has_pair(std::vector<Card *> hand)
 {
 }
 
-bool couleur(std::vector<Card *> hand)
+bool color(std::vector<Card *> hand)
 {
 
     if (hand.empty())
@@ -59,6 +60,11 @@ bool couleur(std::vector<Card *> hand)
         }
     }
     return true;
+}
+
+bool compareByValue(const Card *card1, const Card *card2)
+{
+    return card1->get_value() < card2->get_value();
 }
 
 bool sequence(const std::vector<Card *> &hand)
@@ -114,29 +120,39 @@ void test_best_hand()
     hand2.push_back(new Card(Card::QUATRE, Card::COEUR));
     hand2.push_back(new Card(Card::SIX, Card::TREFLE));
 
+    std::vector<Card *> hand3;
+    hand3.push_back(new Card(Card::CINQ, Card::PIQUE));
+    hand3.push_back(new Card(Card::DEUX, Card::TREFLE));
+    hand3.push_back(new Card(Card::UN, Card::CARREAU));
+    hand3.push_back(new Card(Card::QUATRE, Card::COEUR));
+    hand3.push_back(new Card(Card::TROIS, Card::PIQUE));
+
     std::cout << "Debut des test." << std::endl;
     // std::cout << "Hand 1: ";
     // display_hand(hand);
     // std::cout << "Hand 2: ";
     // display_hand(hand2);
 
-    if (!couleur(hand) == true)
+    if (!color(hand) == true)
         std::cout << "Echec du test de la 1e couleur." << std::endl;
-    if (!couleur(hand2) == false)
+    if (!color(hand2) == false)
         std::cout << "Echec du test de la 2e couleur." << std::endl;
 
     if (!sequence(hand) == true)
         std::cout << "Echec du test de la 1e suite." << std::endl;
     if (!sequence(hand2) == false)
         std::cout << "Echec du test de la 2e suite." << std::endl;
+    if (!sequence(hand3) == true)
+        std::cout << "Echec du test de la 3e suite." << std::endl;
 
     for (Card *i : hand)
         delete i;
     for (Card *i : hand2)
         delete i;
 
-    std::cout << "Tour les test ont etais passe avec succes." << std::endl;
+    std::cout << "Tout les test ont etais passe" << std::endl;
 }
+
 #pragma endregion
 
 /* ***************************************************************************
