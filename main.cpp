@@ -7,6 +7,36 @@ int best_hand(std::vector<Card *> hand)
     return 0;
 }
 
+bool couleur(const std::vector<Card>& hand) {
+    
+    if (hand.empty()) {
+        return false;
+    }
+
+    int colorReference = hand.begin();
+
+    for (const Card& other : hand) {
+
+        if (hand.colors != hand.begin()) {
+            return false;
+        }
+    }
+    return true;
+}
+
+int main() {
+    
+    std::vector<Card> deck = {Card(Card:: PIQUE), Card(Card::PIQUE), Card(Card::PIQUE),Card(Card::PIQUE),Card(Card::PIQUE};
+
+    if (couleur(deck)) {
+        std::cout << "Toutes les cartes ont la meme couleur." << std::endl;
+    } else {
+        std::cout << "Les cartes n'ont pas la meme couleur." << std::endl;
+    }
+
+    return 0;
+}
+
 int main()
 {
     std::cout << "Run ...." << std::endl;
