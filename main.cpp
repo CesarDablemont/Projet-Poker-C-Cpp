@@ -51,6 +51,23 @@ bool couleur(std::vector<Card *> hand)
     return true;
 }
 
+bool sequence(std::vector<Card *> hand)
+{
+
+    hand.begin();
+    for(Card *i : hand)
+    {
+        if (i->get_value() != hand[0+1]->get_value()) {
+            return true;
+        }
+        else 
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 int best_hand(std::vector<Card *> hand)
 {
     return 0;
