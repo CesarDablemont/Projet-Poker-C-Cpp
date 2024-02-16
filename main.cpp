@@ -28,7 +28,7 @@ void display_hand(std::vector<Card *> hand)
   HAND TESTS
 *************************************************************************** */
 bool has_pair(std::vector<Card *> hand)
-{
+{ 
     
 }
 
