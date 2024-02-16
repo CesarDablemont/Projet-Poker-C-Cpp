@@ -39,13 +39,12 @@ bool couleur(const std::vector<Card> &hand)
         return false;
     }
 
-    int colorReference = hand.begin();
+    hand.begin();
 
     for (const Card &other : hand)
     {
 
-        if (hand.colors != hand.begin())
-        {
+        if (hand.COLOR != hand.begin()) {
             return false;
         }
     }
@@ -94,4 +93,14 @@ int main()
         delete i;
 
     std::cout << "This is the end, just ..." << std::endl;
+
+    std::vector<Card> deck = {Card(Card:: PIQUE), Card(Card::PIQUE), Card(Card::PIQUE),Card(Card::PIQUE),Card(Card::PIQUE)};
+
+    if (couleur(deck)) {
+        std::cout << "Toutes les cartes ont la meme couleur." << std::endl;
+    } else {
+        std::cout << "Les cartes n'ont pas la meme couleur." << std::endl;
+    }
+
+    return 0;
 }
