@@ -1,10 +1,12 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
 #include "card.h"
 
 /* ***************************************************************************
   DISPLAY
 *************************************************************************** */
+#pragma region
 void display_game(Game myGame)
 {
     std::cout << "game: ";
@@ -22,13 +24,20 @@ void display_hand(std::vector<Card *> hand)
         std::cout << i->to_string() << ' ';
     std::cout << std::endl;
 }
+#pragma endregion
 
 /* ***************************************************************************
   HAND TESTS
 *************************************************************************** */
+#pragma region
+
+bool compareByValue(const Card *card1, const Card *card2)
+{
+    return card1->get_value() < card2->get_value();
+}
+
 bool has_pair(std::vector<Card *> hand)
-{ 
-    
+{
 }
 
 bool couleur(std::vector<Card *> hand)
@@ -52,22 +61,30 @@ bool couleur(std::vector<Card *> hand)
     return true;
 }
 
-bool sequence(std::vector<Card *> hand)
+bool sequence(const std::vector<Card *> &hand)
 {
-
-    hand.begin();
-    for (Card *i : hand)
+    if (hand.empty())
     {
-        //probleme :/
-        if (i->get_value() != hand[0] -> get_value() + 1)
+        // Empty hand, not a sequence
+        return false;
+    }
+
+    // trier d'abord les cartes pour que la fonction fonctionne correctement
+    // std::sort(hand.begin(), hand.end(), compareByValue);
+
+    int expectedValue = hand[0]->get_value() + 1; // Expected value for the next card
+
+    for (size_t i = 1; i < hand.size(); i++)
+    {
+        if (hand[i]->get_value() != expectedValue)
         {
-            return true;
-        }
-        else
-        {
+            // Values are not in sequence
             return false;
         }
+        expectedValue++; // Update the expected value for the next iteration
     }
+
+    // All values are in sequence
     return true;
 }
 
@@ -75,10 +92,12 @@ int best_hand(std::vector<Card *> hand)
 {
     return 0;
 }
+#pragma endregion
 
 /* ***************************************************************************
   TEST HAND TESTS
 *************************************************************************** */
+#pragma region
 void test_best_hand()
 {
     std::vector<Card *> hand;
@@ -118,10 +137,12 @@ void test_best_hand()
 
     std::cout << "Tour les test ont etais passe avec succes." << std::endl;
 }
+#pragma endregion
 
 /* ***************************************************************************
   MAIN
 *************************************************************************** */
+#pragma region
 int main()
 {
     // std::cout << "2 de coeur" << std::endl;
@@ -153,3 +174,4 @@ int main()
 
     return 0;
 }
+#pragma endregion
