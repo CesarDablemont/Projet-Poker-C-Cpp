@@ -3,14 +3,14 @@
 #include "card.h"
 
 /* ***************************************************************************
-  Display
+  DISPLAY
 *************************************************************************** */
 void display_game(Game myGame)
 {
     std::cout << "game: ";
     for (const Card &card : myGame.game)
     {
-        // Use const_cast to call to_string() on const object
+        // Utilisez const_cast pour utilisé to_string()
         std::cout << const_cast<Card *>(&card)->to_string() << " ";
     }
     std::cout << std::endl;
@@ -25,7 +25,7 @@ void display_hand(std::vector<Card *> hand)
 }
 
 /* ***************************************************************************
-  Hand tests
+  HAND TESTS
 *************************************************************************** */
 bool has_pair(std::vector<Card *> hand)
 {
@@ -44,7 +44,8 @@ bool couleur(std::vector<Card *> hand)
     for (Card *i : hand)
     {
 
-        if (i->get_color() != hand[0]->get_color()) {
+        if (i->get_color() != hand[0]->get_color())
+        {
             return false;
         }
     }
@@ -54,6 +55,29 @@ bool couleur(std::vector<Card *> hand)
 int best_hand(std::vector<Card *> hand)
 {
     return 0;
+}
+
+/* ***************************************************************************
+  TEST HAND TESTS
+*************************************************************************** */
+void test_best_hand()
+{
+    std::vector<Card *> hand;
+    hand.push_back(new Card(Card::UN, Card::COEUR));
+    hand.push_back(new Card(Card::DEUX, Card::COEUR));
+    hand.push_back(new Card(Card::TROIS, Card::COEUR));
+    hand.push_back(new Card(Card::QUATRE, Card::COEUR));
+    hand.push_back(new Card(Card::CINQ, Card::COEUR));
+
+    std::cout << "Debut des test." << std::endl;
+
+    if (!couleur(hand))
+        std::cout << "Echec du test des couleurs." << std::endl;
+
+    for (Card *i : hand)
+        delete i;
+
+    std::cout << "Tour les test ont etais passe avec succes." << std::endl;
 }
 
 /* ***************************************************************************
@@ -82,14 +106,7 @@ int main()
 
     display_hand(hand);
 
-    best_hand(hand);
-
-    if (couleur(hand)) {
-        std::cout << "Toutes les cartes ont la meme couleur." << std::endl;
-    } else {
-        std::cout << "Les cartes n'ont pas la meme couleur." << std::endl;
-    }
-
+    test_best_hand();
 
     // // Ne pas oublier de libere la memoire (uniquement si on fait "new ...")
     // for (Card *i : hand)
