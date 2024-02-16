@@ -29,6 +29,7 @@ void display_hand(std::vector<Card *> hand)
 *************************************************************************** */
 bool has_pair(std::vector<Card *> hand)
 {
+    
 }
 
 bool couleur(std::vector<Card *> hand)
