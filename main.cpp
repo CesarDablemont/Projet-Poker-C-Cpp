@@ -44,7 +44,7 @@ bool couleur(const std::vector<Card> &hand)
     for (const Card &other : hand)
     {
 
-        if (hand.COLOR != hand.begin()) {
+        if (hand.Card.COLOR != hand.begin()) {
             return false;
         }
     }
