@@ -44,7 +44,7 @@ bool couleur(std::vector<Card *> hand)
     for (Card *i : hand)
     {
 
-        if (hand.colors != hand.begin()) {
+        if (i->get_color() != hand[0]->get_color()) {
             return false;
         }
     }
@@ -90,9 +90,10 @@ int main()
         std::cout << "Les cartes n'ont pas la meme couleur." << std::endl;
     }
 
-    // Ne pas oublier de libere la memoire
-    for (Card *i : hand)
-        delete i;
+
+    // // Ne pas oublier de libere la memoire (uniquement si on fait "new ...")
+    // for (Card *i : hand)
+    //    delete i;
 
     return 0;
 }
