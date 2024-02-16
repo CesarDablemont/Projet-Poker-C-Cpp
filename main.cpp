@@ -54,7 +54,7 @@ int main()
     hand.push_back(new Card(Card::QUATRE, Card::COEUR));
 
     for (Card *i : hand)
-        std::cout << i << ' ';
+        std::cout << i->get_value() << i->colors[i->get_color()] << ' ';
     std::cout << std::endl;
 
     best_hand(hand);
