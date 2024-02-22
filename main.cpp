@@ -1,36 +1,34 @@
-#include <iostream>
-#include <vector>
 #include <algorithm>
+#include <iostream>
 #include <iterator>
+#include <vector>
+
 #include "card.h"
 
 /* ***************************************************************************
   DISPLAY
 *************************************************************************** */
 #pragma region
-void display_game(Game myGame)
-{
-    std::cout << "game: ";
-    for (const Card &card : myGame.game)
-    {
-        // Utilisez const_cast pour utilisé to_string()
-        std::cout << const_cast<Card *>(&card)->to_string() << " ";
-    }
-    std::cout << std::endl;
+
+void display_game(Game myGame) {
+  std::cout << "game: ";
+  for (const Card &card : myGame.game) {
+    // Utilisez const_cast pour utilisé to_string()
+    std::cout << const_cast<Card *>(&card)->to_string() << " ";
+  }
+  std::cout << std::endl;
 }
 
-void display_hand(std::vector<Card *> hand)
-{
-    if (hand.empty())
-    {
-        std::cout << "Empty hand" << std::endl;
-        return;
-    }
+void display_hand(std::vector<Card *> hand) {
+  if (hand.empty()) {
+    std::cout << "Empty hand" << std::endl;
+    return;
+  }
 
-    for (Card *i : hand)
-        std::cout << i->to_string() << ' ';
-    std::cout << std::endl;
+  for (Card *i : hand) std::cout << i->to_string() << ' ';
+  std::cout << std::endl;
 }
+
 #pragma endregion
 
 /* ***************************************************************************
@@ -38,120 +36,95 @@ void display_hand(std::vector<Card *> hand)
 *************************************************************************** */
 #pragma region
 
-bool compareByValue(const Card *card1, const Card *card2)
-{
-    return card1->get_value() < card2->get_value();
+bool compareByValue(const Card *card1, const Card *card2) {
+  return card1->get_value() < card2->get_value();
 }
 
-bool has_pair(std::vector<Card *> hand)
-{
-}
+bool has_amount_of_card(std::vector<Card *> hand, int number) {}
 
-bool color(std::vector<Card *> hand)
-{
+bool color(std::vector<Card *> hand) {
+  if (hand.empty()) return false;
 
-    if (hand.empty())
-    {
-        return false;
+  hand.begin();
+
+  for (Card *i : hand) {
+    if (i->get_color() != hand[0]->get_color()) {
+      return false;
     }
-
-    hand.begin();
-
-    for (Card *i : hand)
-    {
-
-        if (i->get_color() != hand[0]->get_color())
-        {
-            return false;
-        }
-    }
-    return true;
+  }
+  return true;
 }
 
-bool sequence(std::vector<Card *> &hand)
-{
-    if (hand.empty())
-    {
-        // Empty hand, not a sequence
-        return false;
-    }
+bool sequence(std::vector<Card *> &hand) {
+  if (hand.empty()) return false;
 
-    // trier d'abord les cartes pour que la fonction fonctionne correctement
-    std::sort(hand.begin(), hand.end(), compareByValue);
+  // trier d'abord les cartes pour que la fonction fonctionne correctement
+  std::sort(hand.begin(), hand.end(), compareByValue);
 
-    int expectedValue = hand[0]->get_value() + 1; // Expected value for the next card
+  // la valeur de la carte qui suit pour verifier la suite
+  int expectedValue = hand[0]->get_value() + 1;
 
-    for (size_t i = 1; i < hand.size(); i++)
-    {
-        if (hand[i]->get_value() != expectedValue)
-        {
-            // Values are not in sequence
-            return false;
-        }
-        expectedValue++; // Update the expected value for the next iteration
-    }
+  for (size_t i = 1; i < hand.size(); i++) {
+    if (hand[i]->get_value() != expectedValue) return false;
+    expectedValue++;
+  }
 
-    // All values are in sequence
-    return true;
+  return true;
 }
 
-int best_hand(std::vector<Card *> hand)
-{
-    return 0;
-}
+int best_hand(std::vector<Card *> hand) { return 0; }
+
 #pragma endregion
 
 /* ***************************************************************************
   TEST HAND TESTS
 *************************************************************************** */
 #pragma region
-void test_best_hand()
-{
-    std::vector<Card *> hand;
-    hand.push_back(new Card(Card::UN, Card::COEUR));
-    hand.push_back(new Card(Card::DEUX, Card::COEUR));
-    hand.push_back(new Card(Card::TROIS, Card::COEUR));
-    hand.push_back(new Card(Card::QUATRE, Card::COEUR));
-    hand.push_back(new Card(Card::CINQ, Card::COEUR));
 
-    std::vector<Card *> hand2;
-    hand2.push_back(new Card(Card::UN, Card::COEUR));
-    hand2.push_back(new Card(Card::DEUX, Card::COEUR));
-    hand2.push_back(new Card(Card::TROIS, Card::COEUR));
-    hand2.push_back(new Card(Card::QUATRE, Card::COEUR));
-    hand2.push_back(new Card(Card::SIX, Card::TREFLE));
+void test_best_hand() {
+  std::vector<Card *> hand;
+  hand.push_back(new Card(Card::UN, Card::COEUR));
+  hand.push_back(new Card(Card::DEUX, Card::COEUR));
+  hand.push_back(new Card(Card::TROIS, Card::COEUR));
+  hand.push_back(new Card(Card::QUATRE, Card::COEUR));
+  hand.push_back(new Card(Card::CINQ, Card::COEUR));
 
-    std::vector<Card *> hand3;
-    hand3.push_back(new Card(Card::CINQ, Card::PIQUE));
-    hand3.push_back(new Card(Card::DEUX, Card::TREFLE));
-    hand3.push_back(new Card(Card::UN, Card::CARREAU));
-    hand3.push_back(new Card(Card::QUATRE, Card::COEUR));
-    hand3.push_back(new Card(Card::TROIS, Card::PIQUE));
+  std::vector<Card *> hand2;
+  hand2.push_back(new Card(Card::UN, Card::COEUR));
+  hand2.push_back(new Card(Card::DEUX, Card::COEUR));
+  hand2.push_back(new Card(Card::TROIS, Card::COEUR));
+  hand2.push_back(new Card(Card::QUATRE, Card::COEUR));
+  hand2.push_back(new Card(Card::UN, Card::TREFLE));
 
-    std::cout << "Debut des test." << std::endl;
-    // std::cout << "Hand 1: ";
-    // display_hand(hand);
-    // std::cout << "Hand 2: ";
-    // display_hand(hand2);
+  std::vector<Card *> hand3;
+  hand3.push_back(new Card(Card::CINQ, Card::PIQUE));
+  hand3.push_back(new Card(Card::DEUX, Card::TREFLE));
+  hand3.push_back(new Card(Card::UN, Card::CARREAU));
+  hand3.push_back(new Card(Card::QUATRE, Card::COEUR));
+  hand3.push_back(new Card(Card::TROIS, Card::PIQUE));
 
-    if (!color(hand) == true)
-        std::cout << "Echec du test de la 1e couleur." << std::endl;
-    if (!color(hand2) == false)
-        std::cout << "Echec du test de la 2e couleur." << std::endl;
+  std::cout << "Debut des test." << std::endl;
 
-    if (!sequence(hand) == true)
-        std::cout << "Echec du test de la 1e suite." << std::endl;
-    if (!sequence(hand2) == false)
-        std::cout << "Echec du test de la 2e suite." << std::endl;
-    if (!sequence(hand3) == true)
-        std::cout << "Echec du test de la 3e suite." << std::endl;
+  if (!color(hand) == true)
+    std::cout << "Echec du test de la 1e couleur." << std::endl;
+  if (!color(hand2) == false)
+    std::cout << "Echec du test de la 2e couleur." << std::endl;
 
-    for (Card *i : hand)
-        delete i;
-    for (Card *i : hand2)
-        delete i;
+  if (!sequence(hand) == true)
+    std::cout << "Echec du test de la 1e suite." << std::endl;
+  if (!sequence(hand2) == false)
+    std::cout << "Echec du test de la 2e suite." << std::endl;
+  if (!sequence(hand3) == true)
+    std::cout << "Echec du test de la 3e suite." << std::endl;
 
-    std::cout << "Tout les test ont etais passe" << std::endl;
+  if (!has_amount_of_card(hand2, 2) == false)
+    std::cout << "Echec du test de la paire." << std::endl;
+
+  for (Card *i : hand) delete i;
+  for (Card *i : hand2) delete i;
+  for (Card *i : hand3) delete i;
+
+  std::cout << "Tout les test ont etais passe" << std::endl;
 }
 
 #pragma endregion
@@ -160,35 +133,36 @@ void test_best_hand()
   MAIN
 *************************************************************************** */
 #pragma region
-int main()
-{
-    // std::cout << "2 de coeur" << std::endl;
-    // Card c1 = Card(Card::DEUX, Card::COEUR); // 2 de coeur
-    // std::cout << "value: " << c1.get_value() << ", color: " << c1.get_color() << std::endl;
-    // std::cout << "value: " << c1.get_value() << ", color: " << c1.colors[c1.get_color()] << std::endl;
 
-    // Lancer le jeu
-    Game myGame;
-    // display_game(myGame);
+int main() {
+  // std::cout << "2 de coeur" << std::endl;
+  // Card c1 = Card(Card::DEUX, Card::COEUR); // 2 de coeur
+  // std::cout << "value: " << c1.get_value() << ", color: " << c1.get_color()
+  // << std::endl; std::cout << "value: " << c1.get_value() << ", color: " <<
+  // c1.colors[c1.get_color()] << std::endl;
 
-    // Mélanger le jeu
-    myGame.shuffe();
-    // display_game(myGame);
+  // Lancer le jeu
+  Game myGame;
+  // display_game(myGame);
 
-    // Crée une main et y ajouter les 5 premiere carte du jeu
-    std::vector<Card *> hand;
-    for (int i = 0; i < 5; i++)
-    {
-        hand.push_back(&myGame.game[i]);
-    }
-    // display_hand(hand);
+  // Mélanger le jeu
+  myGame.shuffe();
+  // display_game(myGame);
 
-    test_best_hand();
+  // Crée une main et y ajouter les 5 premiere carte du jeu
+  std::vector<Card *> hand;
+  for (int i = 0; i < 5; i++) {
+    hand.push_back(&myGame.game[i]);
+  }
+  // display_hand(hand);
 
-    // // Ne pas oublier de libere la memoire (uniquement si on fait "new ...")
-    // for (Card *i : hand)
-    //    delete i;
+  test_best_hand();
 
-    return 0;
+  // // Ne pas oublier de libere la memoire (uniquement si on fait "new ...")
+  // for (Card *i : hand)
+  //    delete i;
+
+  return 0;
 }
+
 #pragma endregion
