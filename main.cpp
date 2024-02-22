@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <iterator>
 #include "card.h"
 
 /* ***************************************************************************
@@ -37,6 +38,11 @@ void display_hand(std::vector<Card *> hand)
 *************************************************************************** */
 #pragma region
 
+bool compareByValue(const Card *card1, const Card *card2)
+{
+    return card1->get_value() < card2->get_value();
+}
+
 bool has_pair(std::vector<Card *> hand)
 {
 }
@@ -62,12 +68,7 @@ bool color(std::vector<Card *> hand)
     return true;
 }
 
-bool compareByValue(const Card *card1, const Card *card2)
-{
-    return card1->get_value() < card2->get_value();
-}
-
-bool sequence(const std::vector<Card *> &hand)
+bool sequence(std::vector<Card *> &hand)
 {
     if (hand.empty())
     {
@@ -76,7 +77,7 @@ bool sequence(const std::vector<Card *> &hand)
     }
 
     // trier d'abord les cartes pour que la fonction fonctionne correctement
-    // std::sort(hand.begin(), hand.end(), compareByValue);
+    std::sort(hand.begin(), hand.end(), compareByValue);
 
     int expectedValue = hand[0]->get_value() + 1; // Expected value for the next card
 
