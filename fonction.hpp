@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "card.h"
+#include "display.hpp"
 
 
 bool compareByValue(const Card *card1, const Card *card2);
@@ -15,5 +16,7 @@ Card::VALUE has_amount_of_card_2(std::vector<Card *> hand, int number);
 Card::VALUE sequence_2(std::vector<Card *> &hand);
 Card::VALUE hauteur(std::vector<Card *> &hand);
 std::vector<Card::VALUE> has_double_pair_2(std::vector<Card *> hand);
+
+int best_hand(std::vector<Card *> hand);
 
 #endif
