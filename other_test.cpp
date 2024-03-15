@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cassert>
 #include "card.h"
 #include "display.hpp"
 #include "fonction.hpp"
@@ -40,28 +41,20 @@ std::vector<Card *> hand;
   hand5.push_back(new Card(Card::ROI, Card::COEUR));
   hand5.push_back(new Card(Card::DAME, Card::PIQUE));
 
-  std::vector<Card *> hand6;
-  hand6.push_back(new Card(Card::DEUX, Card::PIQUE));
-  hand6.push_back(new Card(Card::ROI, Card::TREFLE));
-  hand6.push_back(new Card(Card::ROI, Card::CARREAU));
-  hand6.push_back(new Card(Card::DAME, Card::COEUR));
-  hand6.push_back(new Card(Card::DAME, Card::PIQUE));
 
+  std::cout << "Debut des tests du brelan." << std::endl;
 
-  std::cout << "Debut des tests de la double paire." << std::endl;
+  assert(has_amount_of_card_2(hand, 3) == Card::NB_VALUES);
+  assert(has_amount_of_card_2(hand2, 3) ==  Card::NB_VALUES);
+  assert(has_amount_of_card_2(hand3, 3) ==  Card::NB_VALUES);
+  assert(has_amount_of_card_2(hand4, 3) == Card::ROI);
+  assert(has_amount_of_card_2(hand5, 3) ==  Card::NB_VALUES);
 
-  if (!has_double_pair(hand) == false)
-    std::cout << "Echec du 1e test." << std::endl;
-  if (!has_double_pair(hand2) == false)
-    std::cout << "Echec du 2e test." << std::endl;
-  if (!has_double_pair(hand3) == false)
-    std::cout << "Echec du 3e test." << std::endl;
-  if (!has_double_pair(hand4) == false)
-    std::cout << "Echec du 4e test." << std::endl;
-  if (!has_double_pair(hand5) == false)
-    std::cout << "Echec du 5e test." << std::endl;
-  if (!has_double_pair(hand6) == true)
-    std::cout << "Echec du 6e test." << std::endl;
+  assert(sequence_2(hand) == Card::SIX);
+  assert(sequence_2(hand2) ==  Card::NB_VALUES);
+  assert(sequence_2(hand3) ==  Card::SIX);
+  assert(sequence_2(hand4) == Card::NB_VALUES);
+  assert(sequence_2(hand5) ==  Card::NB_VALUES);
 
   std::cout << "Tout les test ont etais passe" << std::endl;
 
@@ -70,5 +63,4 @@ std::vector<Card *> hand;
   for (Card *i : hand3) delete i;
   for (Card *i : hand4) delete i;
   for (Card *i : hand5) delete i;
-  for (Card *i : hand6) delete i;
 }
