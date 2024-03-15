@@ -7,39 +7,11 @@
 #include "display.hpp"
 #include "fonction.hpp"
 
-
-/* ***************************************************************************
-  HAND TESTS
-*************************************************************************** */
-#pragma region
-
-
-
-#pragma endregion
-
-/* ***************************************************************************
-  TEST best_hand
-*************************************************************************** */
-#pragma region
-
-void test_best_hand(){
-
-  
-
-}
-
-#pragma endregion
-
-/* ***************************************************************************
-  MAIN
-*************************************************************************** */
-#pragma region
-
 int main() {
 
   // Lancer le jeu
   Game myGame;
-  display_game(myGame);
+  // display_game(myGame);
 
   // Mélanger le jeu
   myGame.shuffe();
@@ -50,11 +22,9 @@ int main() {
   for (int i = 0; i < 5; i++) {
     hand.push_back(&myGame.game[i]);
   }
+  
+  std::cout << "Ma main : ";
   display_hand(hand);
-
-
-  test_best_hand();
+  best_hand(hand);
   
 }
-
-#pragma endregion
