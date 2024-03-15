@@ -1,5 +1,7 @@
 #include <iostream>
+#include <vector>
 #include <cassert>
+
 #include "card.h"
 #include "display.hpp"
 #include "fonction.hpp"
@@ -41,6 +43,13 @@ std::vector<Card *> hand;
   hand5.push_back(new Card(Card::ROI, Card::COEUR));
   hand5.push_back(new Card(Card::DAME, Card::PIQUE));
 
+  std::vector<Card *> hand6;
+  hand6.push_back(new Card(Card::DEUX, Card::PIQUE));
+  hand6.push_back(new Card(Card::ROI, Card::TREFLE));
+  hand6.push_back(new Card(Card::ROI, Card::CARREAU));
+  hand6.push_back(new Card(Card::DAME, Card::COEUR));
+  hand6.push_back(new Card(Card::DAME, Card::PIQUE));
+
 
   std::cout << "Debut des tests du brelan." << std::endl;
 
@@ -56,6 +65,12 @@ std::vector<Card *> hand;
   assert(sequence_2(hand4) == Card::NB_VALUES);
   assert(sequence_2(hand5) ==  Card::NB_VALUES);
 
+  std::vector<Card::VALUE> result = has_double_pair_2(hand6);
+  for (const auto& value : result) {
+      std::cout << value << " ";
+  }
+  std::cout << std::endl;
+
   std::cout << "Tout les test ont etais passe" << std::endl;
 
   for (Card *i : hand) delete i;
@@ -63,4 +78,5 @@ std::vector<Card *> hand;
   for (Card *i : hand3) delete i;
   for (Card *i : hand4) delete i;
   for (Card *i : hand5) delete i;
+  for (Card *i : hand6) delete i;
 }

@@ -51,6 +51,33 @@ bool has_double_pair(std::vector<Card *> hand) {
     return pairCount == 2;
 }
 
+std::vector<Card::VALUE> has_double_pair_2(std::vector<Card *> hand) {
+    std::unordered_map<Card::VALUE, int> freqMap;
+
+    // Comptage des fréquences de chaque valeur de carte
+    for (const auto& cardPtr : hand) {
+        Card::VALUE cardValue = static_cast<Card::VALUE>(cardPtr->get_value());
+        freqMap[cardValue]++;
+    }
+
+    // Recherche des deux paires
+    std::vector<Card::VALUE> doublePairs;
+    for (const auto& pair : freqMap) {
+        if (pair.second == 2) {
+            doublePairs.push_back(pair.first);
+        }
+    }
+
+    // Renvoi des valeurs des deux paires
+    if (doublePairs.size() == 2) {
+        return doublePairs;
+    } else {
+        // Retourner un vecteur vide si deux paires ne sont pas trouvées
+        return std::vector<Card::VALUE>();
+    }
+}
+
+
 
 Card::VALUE has_amount_of_card_2(std::vector<Card *> hand, int number) {
   std::unordered_map<Card::VALUE, int> freqMap;
