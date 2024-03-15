@@ -58,7 +58,7 @@ std::vector<Card *> hand;
   assert(has_double_pair(hand5) == false);
   assert(has_double_pair(hand6) == true);
 
-  std::cout << "Tout les test ont etais passe" << std::endl;
+  std::cout << "Tout les tests ont ete passes" << std::endl;
 
   for (Card *i : hand) delete i;
   for (Card *i : hand2) delete i;

@@ -44,7 +44,7 @@ std::vector<Card *> hand;
 
   std::cout << "Debut des tests du full." << std::endl;
 
-  // la quinte flush est juste une combinaison d'une paire et un brelan
+  // la quinte flush est juste une combinaison d'une paire et un brelan.
 
   assert((has_amount_of_card(hand, 3) && has_amount_of_card(hand, 2)) == false);
   assert((has_amount_of_card(hand2, 3) && has_amount_of_card(hand2, 2)) == false);
@@ -52,7 +52,7 @@ std::vector<Card *> hand;
   assert((has_amount_of_card(hand4, 3) && has_amount_of_card(hand4, 2)) == true);
   assert((has_amount_of_card(hand5, 3) && has_amount_of_card(hand5, 2)) == false);
 
-  std::cout << "Tout les test ont etais passe" << std::endl;
+  std::cout << "Tout les tests ont ete passes" << std::endl;
 
   for (Card *i : hand) delete i;
   for (Card *i : hand2) delete i;

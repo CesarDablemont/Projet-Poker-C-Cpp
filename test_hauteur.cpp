@@ -50,7 +50,7 @@ std::vector<Card *> hand;
   assert(hauteur(hand4) == Card::ROI);
   assert(hauteur(hand5) ==  Card::ROI);
 
-  std::cout << "Tout les test ont etais passe" << std::endl;
+  std::cout << "Tout les tests ont ete passes" << std::endl;
 
   for (Card *i : hand) delete i;
   for (Card *i : hand2) delete i;

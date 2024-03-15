@@ -50,7 +50,7 @@ std::vector<Card *> hand;
   assert(color(hand4) == false);
   assert(color(hand5) == false);
 
-  std::cout << "Tout les test ont etais passe" << std::endl;
+  std::cout << "Tout les test ont ete passes" << std::endl;
 
   for (Card *i : hand) delete i;
   for (Card *i : hand2) delete i;
