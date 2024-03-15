@@ -4,6 +4,7 @@
 #include <random>
 #include <algorithm>
 #include <ctime>
+#include <chrono>
 
 #include "card.h"
 
@@ -97,11 +98,19 @@ Game::~Game()
 
 void Game::shuffe()
 {
-    Card c;
+    // Card c;
 
-    srand((unsigned)time(NULL));
+    // srand((unsigned)time(NULL));
+    // for (int i = 0; i < 128 * 16; i++)
+    // {
+    //     std::shuffle(this->game.begin(), this->game.end(), std::random_device());
+    // }
+
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::mt19937 g(seed);
+
     for (int i = 0; i < 128 * 16; i++)
     {
-        std::shuffle(this->game.begin(), this->game.end(), std::random_device());
+        std::shuffle(this->game.begin(), this->game.end(), g);
     }
 }
