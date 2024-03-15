@@ -50,17 +50,6 @@ std::vector<Card *> hand;
   assert(has_amount_of_card(hand4, 3) == true);
   assert(has_amount_of_card(hand5, 3) == false);
 
-  // if(!has_amount_of_card(hand, 3) == false)
-  //   std::cout << "Echec du 1e test." << std::endl;
-  // if (!has_amount_of_card(hand2, 3) == false)
-  //   std::cout << "Echec du 2e test." << std::endl;
-  // if (!has_amount_of_card(hand3, 3) == false)
-  //   std::cout << "Echec du 3e test." << std::endl;
-  // if (!has_amount_of_card(hand4, 3) == true) // on detecte bien un brelan dans le full
-  //   std::cout << "Echec du 4e test." << std::endl;
-  // if (!has_amount_of_card(hand5, 3) == false)
-  //   std::cout << "Echec du 5e test." << std::endl;
-
   std::cout << "Tout les test ont etais passe" << std::endl;
 
   for (Card *i : hand) delete i;

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cassert>
 #include "card.h"
 #include "display.hpp"
 #include "fonction.hpp"
@@ -50,18 +51,12 @@ std::vector<Card *> hand;
 
   std::cout << "Debut des tests de la double paire." << std::endl;
 
-  if (!has_double_pair(hand) == false)
-    std::cout << "Echec du 1e test." << std::endl;
-  if (!has_double_pair(hand2) == false)
-    std::cout << "Echec du 2e test." << std::endl;
-  if (!has_double_pair(hand3) == false)
-    std::cout << "Echec du 3e test." << std::endl;
-  if (!has_double_pair(hand4) == false)
-    std::cout << "Echec du 4e test." << std::endl;
-  if (!has_double_pair(hand5) == false)
-    std::cout << "Echec du 5e test." << std::endl;
-  if (!has_double_pair(hand6) == true)
-    std::cout << "Echec du 6e test." << std::endl;
+  assert(has_double_pair(hand) == false);
+  assert(has_double_pair(hand2) == false);
+  assert(has_double_pair(hand3) == false);
+  assert(has_double_pair(hand4) == false);
+  assert(has_double_pair(hand5) == false);
+  assert(has_double_pair(hand6) == true);
 
   std::cout << "Tout les test ont etais passe" << std::endl;
 

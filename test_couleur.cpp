@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cassert>
 #include "card.h"
 #include "display.hpp"
 #include "fonction.hpp"
@@ -43,16 +44,11 @@ std::vector<Card *> hand;
 
   std::cout << "Debut des tests de la couleur." << std::endl;
 
-  if (!color(hand) == true)
-    std::cout << "Echec du 1e test." << std::endl;
-  if (!color(hand2) == false)
-    std::cout << "Echec du 2e test." << std::endl;
-  if (!color(hand3) == false)
-    std::cout << "Echec du 3e test." << std::endl;
-  if (!color(hand4) == false)
-    std::cout << "Echec du 4e test." << std::endl;
-  if (!color(hand5) == false)
-    std::cout << "Echec du 5e test." << std::endl;
+  assert(color(hand) == true);
+  assert(color(hand2) == false);
+  assert(color(hand3) == false);
+  assert(color(hand4) == false);
+  assert(color(hand5) == false);
 
   std::cout << "Tout les test ont etais passe" << std::endl;
 

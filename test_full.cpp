@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cassert>
 #include "card.h"
 #include "display.hpp"
 #include "fonction.hpp"
@@ -43,18 +44,13 @@ std::vector<Card *> hand;
 
   std::cout << "Debut des tests du full." << std::endl;
 
-  // le full est juste une combinaison d'une paire et un brelan
-  
-  if (!(has_amount_of_card(hand, 3) && has_amount_of_card(hand, 2)) == false)
-    std::cout << "Echec du 1e test." << std::endl;
-  if (!(has_amount_of_card(hand2, 3) && has_amount_of_card(hand2, 2)) == false)
-    std::cout << "Echec du 2e test." << std::endl;
-  if (!(has_amount_of_card(hand3, 3) && has_amount_of_card(hand3, 2)) == false)
-    std::cout << "Echec du 3e test." << std::endl;
-  if (!(has_amount_of_card(hand4, 3) && has_amount_of_card(hand4, 2)) == true)
-    std::cout << "Echec du 4e test." << std::endl;
-  if (!(has_amount_of_card(hand5, 3) && has_amount_of_card(hand5, 2)) == false)
-    std::cout << "Echec du 5e test." << std::endl;
+  // la quinte flush est juste une combinaison d'une paire et un brelan
+
+  assert((has_amount_of_card(hand, 3) && has_amount_of_card(hand, 2)) == false);
+  assert((has_amount_of_card(hand2, 3) && has_amount_of_card(hand2, 2)) == false);
+  assert((has_amount_of_card(hand3, 3) && has_amount_of_card(hand3, 2)) == false);
+  assert((has_amount_of_card(hand4, 3) && has_amount_of_card(hand4, 2)) == true);
+  assert((has_amount_of_card(hand5, 3) && has_amount_of_card(hand5, 2)) == false);
 
   std::cout << "Tout les test ont etais passe" << std::endl;
 

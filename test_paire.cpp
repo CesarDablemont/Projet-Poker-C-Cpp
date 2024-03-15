@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cassert>
 #include "card.h"
 #include "display.hpp"
 #include "fonction.hpp"
@@ -43,16 +44,11 @@ std::vector<Card *> hand;
 
   std::cout << "Debut des tests de la paire." << std::endl;
 
-  if (!has_amount_of_card(hand, 2) == false)
-    std::cout << "Echec du 1e test." << std::endl;
-  if (!has_amount_of_card(hand2, 2) == true)
-    std::cout << "Echec du 2e test." << std::endl;
-  if (!has_amount_of_card(hand3, 2) == false)
-    std::cout << "Echec du 3e test." << std::endl;
-  if (!has_amount_of_card(hand4, 2) == true) // on detecte bien une paire dans le full
-    std::cout << "Echec du 4e test." << std::endl;
-  if (!has_amount_of_card(hand5, 2) == false)
-    std::cout << "Echec du 5e test." << std::endl;
+  assert(has_amount_of_card(hand, 2) == false);
+  assert(has_amount_of_card(hand2, 2) == true);
+  assert(has_amount_of_card(hand3, 2) == false);
+  assert(has_amount_of_card(hand4, 2) == true); // on detecte bien une paire dans le full
+  assert(has_amount_of_card(hand5, 2) == false);
 
   std::cout << "Tout les test ont etais passe" << std::endl;
 
