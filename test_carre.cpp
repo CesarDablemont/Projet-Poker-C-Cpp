@@ -50,7 +50,7 @@ std::vector<Card *> hand;
   assert(has_amount_of_card(hand4, 4) == false);
   assert(has_amount_of_card(hand5, 4) == true);
 
-  std::cout << "Tout les test ont etais passe" << std::endl;
+  std::cout << "Tout les tests ont ete passes" << std::endl;
 
   for (Card *i : hand) delete i;
   for (Card *i : hand2) delete i;
