@@ -4,103 +4,15 @@
 #include <vector>
 
 #include "card.h"
+#include "display.hpp"
+#include "fonction.hpp"
 
-/* ***************************************************************************
-  DISPLAY
-*************************************************************************** */
-#pragma region
-
-void display_game(Game myGame) {
-  std::cout << "game: ";
-  for (const Card &card : myGame.game) {
-    // Utilisez const_cast pour utilisé to_string()
-    std::cout << const_cast<Card *>(&card)->to_string() << " ";
-  }
-  std::cout << std::endl;
-}
-
-void display_hand(std::vector<Card *> hand) {
-  if (hand.empty()) {
-    std::cout << "Empty hand" << std::endl;
-    return;
-  }
-
-  for (Card *i : hand) std::cout << i->to_string() << ' ';
-  std::cout << std::endl;
-}
-
-void display_unordered_map(const std::unordered_map<Card::VALUE, int> &uMap) {
-  if (uMap.empty()) {
-    std::cout << "Empty unordered_map" << std::endl;
-    return;
-  }
-
-  for (const auto &pair : uMap)
-    std::cout << "key " << static_cast<int>(pair.first) << ": value "
-              << pair.second << ", ";
-
-  std::cout << std::endl;
-}
-
-#pragma endregion
 
 /* ***************************************************************************
   HAND TESTS
 *************************************************************************** */
 #pragma region
 
-bool compareByValue(const Card *card1, const Card *card2) {
-  return card1->get_value() < card2->get_value();
-}
-
-bool has_amount_of_card(std::vector<Card *> hand, int number) {
-  // std::sort(hand.begin(), hand.end(), compareByValue);
-
-  // Une map poure le nombre de fréquences de chaque valeur dans le vecteur
-  std::unordered_map<Card::VALUE, int> freqMap;
-
-  for (int i = 0; i < 5; i++) {
-    auto value = hand[i]->get_value();
-    Card::VALUE cardValue = static_cast<Card::VALUE>(value);
-    freqMap[cardValue]++;
-  }
-
-  // display_unordered_map(freqMap);
-
-  return std::any_of(
-      freqMap.begin(), freqMap.end(),
-      [number](const auto &pair) { return pair.second == number; });
-}
-
-bool color(std::vector<Card *> hand) {
-  if (hand.empty()) return false;
-
-  hand.begin();
-
-  for (Card *i : hand) {
-    if (i->get_color() != hand[0]->get_color()) {
-      return false;
-    }
-  }
-  return true;
-}
-
-bool sequence(std::vector<Card *> &hand) {
-  if (hand.empty()) return false;
-
-  // trier d'abord les cartes pour que la fonction fonctionne correctement
-  std::sort(hand.begin(), hand.end(), compareByValue);
-
-  // la valeur de la carte qui suit pour verifier la suite
-  int expectedValue = hand[0]->get_value() + 1;
-
-  for (size_t i = 1; i < hand.size(); i++) {
-    if (hand[i]->get_value() != expectedValue) return false;
-    expectedValue++;
-  }
-
-  return true;
-}
 
 int best_hand(std::vector<Card *> hand) {
   std::sort(hand.begin(), hand.end(), compareByValue);
@@ -131,23 +43,23 @@ int best_hand(std::vector<Card *> hand) {
 
 void test_best_hand_sub_function() {
   std::vector<Card *> hand;
-  hand.push_back(new Card(Card::UN, Card::COEUR));
   hand.push_back(new Card(Card::DEUX, Card::COEUR));
   hand.push_back(new Card(Card::TROIS, Card::COEUR));
   hand.push_back(new Card(Card::QUATRE, Card::COEUR));
   hand.push_back(new Card(Card::CINQ, Card::COEUR));
+  hand.push_back(new Card(Card::SIX, Card::COEUR));
 
   std::vector<Card *> hand2;
-  hand2.push_back(new Card(Card::UN, Card::COEUR));
+  hand2.push_back(new Card(Card::CINQ, Card::COEUR));
   hand2.push_back(new Card(Card::DEUX, Card::COEUR));
   hand2.push_back(new Card(Card::TROIS, Card::COEUR));
   hand2.push_back(new Card(Card::QUATRE, Card::COEUR));
-  hand2.push_back(new Card(Card::UN, Card::TREFLE));
+  hand2.push_back(new Card(Card::CINQ, Card::TREFLE));
 
   std::vector<Card *> hand3;
   hand3.push_back(new Card(Card::CINQ, Card::PIQUE));
   hand3.push_back(new Card(Card::DEUX, Card::TREFLE));
-  hand3.push_back(new Card(Card::UN, Card::CARREAU));
+  hand3.push_back(new Card(Card::SIX, Card::CARREAU));
   hand3.push_back(new Card(Card::QUATRE, Card::COEUR));
   hand3.push_back(new Card(Card::TROIS, Card::PIQUE));
 
@@ -190,9 +102,15 @@ void test_best_hand_sub_function() {
     std::cout << "Echec du 2e test du brelan." << std::endl;
 
   if (!has_amount_of_card(hand5, 4) == true)
-    std::cout << "Echec du 1e test du carrE." << std::endl;
+    std::cout << "Echec du 1e test du carre." << std::endl;
   if (!has_amount_of_card(hand4, 4) == false)
-    std::cout << "Echec du 2e test du carrE." << std::endl;
+    std::cout << "Echec du 2e test du carre." << std::endl;
+
+  if (!(has_amount_of_card(hand4, 3) && has_amount_of_card(hand4, 2)) == true)
+    std::cout << "Echec du 1e test du full." << std::endl;
+  if (!(has_amount_of_card(hand5, 3) && has_amount_of_card(hand5, 2)) == false)
+    std::cout << "Echec du 2e test du full." << std::endl;
+
 
   for (Card *i : hand) delete i;
   for (Card *i : hand2) delete i;
@@ -205,11 +123,11 @@ void test_best_hand_sub_function() {
 
 void test_best_hand() {
   std::vector<Card *> hand;
-  hand.push_back(new Card(Card::UN, Card::COEUR));
   hand.push_back(new Card(Card::DEUX, Card::COEUR));
   hand.push_back(new Card(Card::TROIS, Card::COEUR));
   hand.push_back(new Card(Card::QUATRE, Card::COEUR));
   hand.push_back(new Card(Card::CINQ, Card::COEUR));
+  hand.push_back(new Card(Card::SIX, Card::COEUR));
 
   std::cout << "Debut des test (test_best_hand)." << std::endl;
 
@@ -236,18 +154,18 @@ int main() {
 
   // Lancer le jeu
   Game myGame;
-  // display_game(myGame);
+  display_game(myGame);
 
   // Mélanger le jeu
   myGame.shuffe();
-  // display_game(myGame);
+  display_game(myGame);
 
   // Crée une main et y ajouter les 5 premiere carte du jeu
   std::vector<Card *> hand;
   for (int i = 0; i < 5; i++) {
     hand.push_back(&myGame.game[i]);
   }
-  // display_hand(hand);
+  display_hand(hand);
 
   test_best_hand_sub_function();
   test_best_hand();
