@@ -92,44 +92,30 @@ int main(){
 
 
 
+  std::vector<std::vector<Card *>> inputs = {
+    in_0, in_1, in_2, in_3, in_4, in_5, in_6, in_7, in_8
+  };
+  std::vector<__int64> outputs = {
+    out_0, out_1, out_2, out_3, out_4, out_5, out_6, out_7, out_8
+  };
+  std::vector<std::string> outputs2 = {
+    out2_0, out2_1, out2_2, out2_3, out2_4, out2_5, out2_6, out2_7, out2_8
+  };
+
   std::cout << "Debut des tests de score_hand()" << std::endl;
-
-  assert(score_hand(in_0) == out_0);
-  assert(score_hand(in_1) == out_1);
-  assert(score_hand(in_2) == out_2);
-  assert(score_hand(in_3) == out_3);
-  assert(score_hand(in_4) == out_4);
-  assert(score_hand(in_5) == out_5);
-  assert(score_hand(in_6) == out_6);
-  assert(score_hand(in_7) == out_7);
-  assert(score_hand(in_8) == out_8);
-
+  for(int i = 0; i < inputs.size(); i++){
+    assert(score_hand(inputs[i]) == outputs[i]);
+  }
 
   std::cout << "Debut des tests de score_to_text()" << std::endl;
-
-  assert(score_to_text(out_0) == out2_0);
-  assert(score_to_text(out_1) == out2_1);
-  assert(score_to_text(out_2) == out2_2);
-  assert(score_to_text(out_3) == out2_3);
-  assert(score_to_text(out_4) == out2_4);
-  assert(score_to_text(out_5) == out2_5);
-  assert(score_to_text(out_6) == out2_6);
-  assert(score_to_text(out_7) == out2_7);
-  assert(score_to_text(out_8) == out2_8);
-
+  for(int i = 0; i < inputs.size(); i++){
+    assert(score_to_text(outputs[i]) == outputs2[i]);
+  }
 
   std::cout << "Debut des tests de score_hand() et score_to_text() simultanement" << std::endl;
-
-  assert(score_to_text(score_hand(in_0)) == out2_0);
-  assert(score_to_text(score_hand(in_1)) == out2_1);
-  assert(score_to_text(score_hand(in_2)) == out2_2);
-  assert(score_to_text(score_hand(in_3)) == out2_3);
-  assert(score_to_text(score_hand(in_4)) == out2_4);
-  assert(score_to_text(score_hand(in_5)) == out2_5);
-  assert(score_to_text(score_hand(in_6)) == out2_6);
-  assert(score_to_text(score_hand(in_7)) == out2_7);
-  assert(score_to_text(score_hand(in_8)) == out2_8);
-
+  for(int i = 0; i < inputs.size(); i++){
+    assert(score_to_text(score_hand(inputs[i])) == outputs2[i]);
+  }
 
   std::cout << "Tout les test ont etais passe" << std::endl;
 
