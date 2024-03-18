@@ -1,68 +1,173 @@
 #include <iostream>
 #include <algorithm>
-#include <unordered_map>
+#include <map>
 #include <vector>
 
 #include "fonction.hpp"
 
 
-bool compareByValue(const Card *card1, const Card *card2) {
-  return card1->get_value() < card2->get_value();
-}
+/*
+Logique best_hand
 
-bool has_amount_of_card(std::vector<Card *> hand, int number) {
-  // std::sort(hand.begin(), hand.end(), compareByValue);
+conbinaison: 0-8 (paire, carré, ...)
+0: hauteur
+1: paire
+2: double paire
+3: brelan
+4: suite
+5: couleur
+6: full
+7: carré
+8: quinte flush
 
-  // Une map poure le nombre de fréquences de chaque valeur dans le vecteur
-  std::unordered_map<Card::VALUE, int> freqMap;
+1e valeur combinaison (1-15) si carré carré de quoi ?
+2e valeur combinaison (1-15) si cas double paire ou full besoin 2 valeur
+1e valeur hauteur
+2e valeur hauteur
+3e valeur hauteur
+4e valeur hauteur 
+5e valeur hauteur // jusque 5 si commun :as, roi, dame, valet puis la 5e differente entre les 2 joueur
 
-  for (int i = 0; i < 5; i++) {
+ou score en int mis bout a bout
+{0-8}{0-14}{0-14}{0-14}{0-14}{0-14}{0-14}{0-14} = 15 chiffre
+
+ex de main: (R/T) (A/K) (R/C) (6/C) (10/C) = Paire de ROI avec hauteur AS puis hauteur 10 puis hauteur 6
+score = 2 13 00 14 10 06 00 00
+2: paire, 13: roi, 00: pas de 2e paire, 14: hauteur As, 10: 2e hauteur, 06: 3e hauteur, 00: 4e, 00: 5e
+score final unique = 213001410060000
+
+
+nécessite: __int64 score = 0;
+
+utiliser une map dans les fonctions plutot que le vecteur
+https://www.geeksforgeeks.org/map-associative-containers-the-c-standard-template-library-stl/
+
+*/
+
+
+__int64 score_hand(std::vector<Card *> hand){
+  __int64 score = 0;
+
+  std::map<Card::VALUE, int> valueMap;
+  std::map<Card::COLOR, int> colorMap;
+
+  // map pour les valeurs
+  for (int i = 0; i < hand.size(); i++) {
     auto value = hand[i]->get_value();
     Card::VALUE cardValue = static_cast<Card::VALUE>(value);
-    freqMap[cardValue]++;
+    valueMap[cardValue]++;
   }
 
-  // display_unordered_map(freqMap);
+  // map pour les couleurs
+  for (int i = 0; i < hand.size(); i++) {
+    auto color = hand[i]->get_color();
+    Card::COLOR cardColor = static_cast<Card::COLOR>(color);
+    colorMap[cardColor]++;
+  }
 
-  return std::any_of(
-      freqMap.begin(), freqMap.end(),
-      [number](const auto &pair) { return pair.second == number; });
+  // display_map(valueMap);
+  // display_map(colorMap);
+
+  Card::VALUE paire = has_amount_of_card(valueMap, 2);
+  Card::VALUE brelan = has_amount_of_card(valueMap, 3);
+  Card::VALUE carre = has_amount_of_card(valueMap, 4);
+  std::vector<Card::VALUE> double_paire = has_double_pair(valueMap);
+  Card::VALUE suite = sequence(valueMap);
+  Card::COLOR couleur = color(colorMap);
+
+
+  // Quinte flush
+  if((suite != Card::NB_VALUES) && (couleur != Card::NB_COLORS)){
+    score += 8e14;
+    score += suite * 1e12;
+    valueMap.clear();
+  }
+
+  // Carré
+  else if(carre != Card::NB_VALUES){
+    score += 7e14;
+    score += carre * 1e12;
+    valueMap.erase(carre);
+  }
+
+  // Full
+  else if((brelan != Card::NB_VALUES) && (paire != Card::NB_VALUES)){
+    score += 6e14;
+    score += brelan * 1e12;
+    score += paire * 1e10;
+    valueMap.erase(brelan);
+    valueMap.erase(paire);
+  }
+
+  // Couleur
+  else if(couleur != Card::NB_COLORS){
+    score += 5e14;
+  }
+
+  // Suite
+  else if(suite != Card::NB_VALUES){
+    score += 4e14;
+    score += suite * 1e12;
+    valueMap.clear();
+  }
+
+  // Brelan
+  else if(brelan != Card::NB_VALUES){
+    score += 3e14;
+    score += brelan * 1e12;
+    valueMap.erase(brelan);
+  }
+
+  // Double paire
+  else if(!double_paire.empty()){
+    score += 2e14;
+    score += double_paire[0] * 1e10;
+    score += double_paire[1] * 1e12;
+    valueMap.erase(double_paire[0]);
+    valueMap.erase(double_paire[1]);
+  }
+
+  // Paire
+  else if(paire != Card::NB_VALUES){
+    score += 1e14;
+    score += paire * 1e12;
+    valueMap.erase(paire);
+  }
+
+
+  // Hauteur avec toute les cartes qui ne sont pas compris dans les combinaisons
+  int multiplicateur = 100000000;
+  for (auto itr = valueMap.rbegin(); itr != valueMap.rend(); ++itr) { // rbegin et rend pour reverse begin et end
+      score += itr->first * multiplicateur;
+      multiplicateur /= 100;
+  }
+
+  return score;
 }
 
-bool has_double_pair(std::vector<Card *> hand) {
-    // Une map pour le nombre de fréquences de chaque valeur dans le vecteur
-    std::unordered_map<Card::VALUE, int> freqMap;
 
-    for (int i = 0; i < hand.size(); i++) {
-        auto value = hand[i]->get_value();
-        Card::VALUE cardValue = static_cast<Card::VALUE>(value);
-        freqMap[cardValue]++;
-    }
 
-    // comme pour has_amount_of_card mais on test si on a 2 occurence
-    int pairCount = 0;
-    for (const auto &pair : freqMap) {
-        if (pair.second == 2) {
-            pairCount++;
-        }
-    }
+Card::VALUE has_amount_of_card(std::map<Card::VALUE, int> map, int number) {
 
-    // vrai si il y en a 2
-    return pairCount == 2;
+  // a-t-on une valeur qui vaux number
+  auto it = std::find_if(map.begin(), map.end(), [number](const auto &pair) {
+    return pair.second == number;
+  });
+
+  // Si oui on renvoie la clé
+  if (it != map.end()){
+    return it->first;
+  }
+
+  return Card::NB_VALUES;
 }
 
-std::vector<Card::VALUE> has_double_pair_2(std::vector<Card *> hand) {
-    std::unordered_map<Card::VALUE, int> freqMap;
 
-    // Comptage des fréquences de chaque valeur de carte
-    for (const auto& cardPtr : hand) {
-        Card::VALUE cardValue = static_cast<Card::VALUE>(cardPtr->get_value());
-        freqMap[cardValue]++;
-    }
+std::vector<Card::VALUE> has_double_pair(std::map<Card::VALUE, int> map) {
 
     // Recherche des deux paires
     std::vector<Card::VALUE> doublePairs;
-    for (const auto& pair : freqMap) {
+    for (const auto& pair : map) {
         if (pair.second == 2) {
             doublePairs.push_back(pair.first);
         }
@@ -72,212 +177,24 @@ std::vector<Card::VALUE> has_double_pair_2(std::vector<Card *> hand) {
     if (doublePairs.size() == 2) {
         return doublePairs;
     } else {
-        // Retourner un vecteur vide si deux paires ne sont pas trouvées
+        // sinon un vecteur vide
         return std::vector<Card::VALUE>();
     }
 }
 
+Card::VALUE sequence(std::map<Card::VALUE, int> map) {
 
-
-Card::VALUE has_amount_of_card_2(std::vector<Card *> hand, int number) {
-  std::unordered_map<Card::VALUE, int> freqMap;
-
-  // Parcourez la main pour compter les fréquences de chaque valeur de carte
-  for (const auto& cardPtr : hand) {
-    Card::VALUE cardValue = static_cast<Card::VALUE>(cardPtr->get_value());
-    freqMap[cardValue]++;
+  if(map.size() < 5) return Card::NB_VALUES;
+  // std::next(itr) != map.end() jusqu'a l'avant dernier
+  for (auto itr = map.begin(); std::next(itr) != map.end(); ++itr) {
+    if ((itr->first + 1) != std::next(itr)->first) return Card::NB_VALUES;
   }
 
-  // Recherchez la première clé correspondant au nombre donné
-  auto it = std::find_if(freqMap.begin(), freqMap.end(), [number](const auto &pair) {
-    return pair.second == number;
-  });
-
-  // Si une clé correspondante est trouvée, retournez-la
-  if (it != freqMap.end())
-      return it->first;
-
-  // Sinon, retournez une valeur hors limites pour indiquer qu'aucune clé correspondante n'a été trouvée
-  return Card::NB_VALUES;
+  return map.rbegin()->first;
 }
 
+Card::COLOR color(std::map<Card::COLOR, int> map) {
 
-bool color(std::vector<Card *> hand) {
-  if (hand.empty()) return false;
-
-  hand.begin();
-
-  for (Card *i : hand) {
-    if (i->get_color() != hand[0]->get_color()) {
-      return false;
-    }
-  }
-  return true;
-}
-
-bool sequence(std::vector<Card *> &hand) {
-  if (hand.empty()) return false;
-
-  // trier d'abord les cartes pour que la fonction fonctionne correctement
-  std::sort(hand.begin(), hand.end(), compareByValue);
-
-  // la valeur de la carte qui suit pour verifier la suite
-  int expectedValue = hand[0]->get_value() + 1;
-
-  for (size_t i = 1; i < hand.size(); i++) {
-    if (hand[i]->get_value() != expectedValue) return false;
-    expectedValue++;
-  }
-
-  return true;
-}
-
-Card::VALUE sequence_2(std::vector<Card *> &hand) {
-  if (hand.empty()) return Card::NB_VALUES;
-
-  // trier d'abord les cartes pour que la fonction fonctionne correctement
-  std::sort(hand.begin(), hand.end(), compareByValue);
-
-  // la valeur de la carte qui suit pour verifier la suite
-  int expectedValue = hand[0]->get_value() + 1;
-
-  for (size_t i = 1; i < hand.size(); i++) {
-    if (hand[i]->get_value() != expectedValue) return Card::NB_VALUES;
-    expectedValue++;
-  }
-
-  return static_cast<Card::VALUE>(hand[4]->get_value());
-}
-
-
-Card::VALUE hauteur(std::vector<Card *> &hand){
-  std::sort(hand.begin(), hand.end(), compareByValue);
-  return static_cast<Card::VALUE>(hand[4]->get_value());
-}
-
-
-
-int best_hand(std::vector<Card *> hand){
-  std::sort(hand.begin(), hand.end(), compareByValue);
-
-  int score = 0;
-
-  if (color(hand) &&( sequence_2(hand) != Card::NB_VALUES)){
-    score += 100000000; // +100000000 pour avoir une quinte flush
-    score += static_cast<int>(sequence_2(hand))*1000; // +1000*l'index de la carte la plus haute de la suite
-    score += static_cast<int>(hauteur(hand)); // l'index de la carte la plus haute de la suite
-    // facultatif puisque la suite utilise les 5 cartes donc sequence_2(hand) renvoie la meme valeur
-
-    std::cout << "Quinte flush au " << valeur_to_string(sequence_2(hand)) << std::endl;
-    std::cout << "score = " << score << std::endl;
-  }
-
-  else if (has_amount_of_card(hand, 4)){
-    int hauteur = 0;
-
-    score += 90000000;
-    score += static_cast<int>(has_amount_of_card_2(hand, 4))*1000;
-
-    for (int i = 0; i < 5; i++) {
-    if (hand[i]->get_value() != has_amount_of_card_2(hand, 4)) {
-        hauteur = hand[i]->get_value();
-        break;
-        }
-    }
-
-    score += hauteur;
-
-    std::cout << "Carre de " << valeur_to_string(has_amount_of_card_2(hand, 4)) << " avec hauteur " << valeur_to_string(hauteur) << std::endl;
-    std::cout << "score = " << score << std::endl;
-  } 
-  
-  else if(has_amount_of_card(hand, 3) && has_amount_of_card(hand, 2)){
-
-    score += 80000000;
-    score += static_cast<int>(has_amount_of_card_2(hand, 3))*10000;
-    score += static_cast<int>(has_amount_of_card_2(hand, 2))*100;
-
-    std::cout << "full de " << valeur_to_string(has_amount_of_card_2(hand, 3)) 
-    << " et " << valeur_to_string(has_amount_of_card_2(hand, 2)) << std::endl; 
-
-    std::cout << "score = " << score << std::endl;
-  }
-  
-  else if(color(hand)){
-    score += 70000000;
-    score += hauteur(hand)*1000;
-
-    std::cout << "Couleur avec hauteur " << valeur_to_string(hauteur(hand)) << std::endl;
-    std::cout << "score = " << score << std::endl;
-  }
-
-  else if (sequence(hand)){
-    score += 60000000;
-    score += sequence_2(hand)*1000;
-
-    std::cout << "Suite au " << valeur_to_string(sequence_2(hand)) << std::endl;
-    std::cout << "score = " << score << std::endl;
-  }
-
-  else if (has_amount_of_card(hand, 3)){
-    int hauteur = 0;
-
-    score += 50000000;
-    score += static_cast<int>(has_amount_of_card_2(hand, 3))*1000;
-    for(int i = 0; i < 5; i++){
-        if(hand[i]->get_value() != has_amount_of_card_2(hand, 3)){
-            if(hand[i]->get_value() > hauteur) {
-                hauteur = hand[i]->get_value();
-            }
-        }
-    }
-
-    score += hauteur;
-    std::cout << "Brelan de " << valeur_to_string(has_amount_of_card_2(hand, 3)) << " avec hauteur " << valeur_to_string(hauteur) << std::endl;
-    std::cout << "score = " << score << std::endl;
-  }
-
-  else if (has_double_pair(hand)){
-    int hauteur = 0;
-
-    score += 40000000;
-    score += static_cast<int>(has_double_pair_2(hand)[0])*10000;
-    score += static_cast<int>(has_double_pair_2(hand)[1])*100;
-
-    for (int i = 0; i < 5; i++) {
-      if ((hand[i]->get_value() != has_double_pair_2(hand)[0]) && hand[i]->get_value() != has_double_pair_2(hand)[1]) {
-        hauteur = hand[i]->get_value();
-        break;
-      }
-    }
-
-    score += hauteur;
-    std::cout << "Paire de " << valeur_to_string(has_double_pair_2(hand)[0]) << " et " << valeur_to_string(has_double_pair_2(hand)[1]) << " avec hauteur " << valeur_to_string(hauteur) << std::endl;
-    std::cout << "score = " << score << std::endl;
-  }
-
-  else if (has_amount_of_card(hand, 2)){
-    int hauteur = 0;
-
-    score += 30000000;
-    score += static_cast<int>(has_amount_of_card_2(hand, 2))*1000;
-    for(int i = 0; i < 5; i++){
-        if(hand[i]->get_value() != has_amount_of_card_2(hand, 2)){
-            if(hand[i]->get_value() > hauteur) {
-                hauteur = hand[i]->get_value();
-            }
-        }
-    }
-
-    score += hauteur;
-    std::cout << "Paire de " << valeur_to_string(has_amount_of_card_2(hand, 2)) << " avec hauteur " << valeur_to_string(hauteur) << std::endl;
-    std::cout << "score = " << score << std::endl;
-  }
-
-  else {
-    score += static_cast<int>(hauteur(hand));
-    std::cout << "Hauteur " << valeur_to_string(hauteur(hand)) << std::endl;
-    std::cout << "score = " << score << std::endl;
-
-  }
+  if(map.size() > 1) return Card::NB_COLORS;
+  return map.begin()->first;
 }
