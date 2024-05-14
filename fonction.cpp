@@ -32,9 +32,9 @@ ou score en int mis bout a bout
 {0-8}{0-14}{0-14}{0-14}{0-14}{0-14}{0-14}{0-14} = 15 chiffre
 
 ex de main: (R/T) (A/K) (R/C) (6/C) (10/C) = Paire de ROI avec hauteur AS puis hauteur 10 puis hauteur 6
-score = 2 13 00 14 10 06 00 00
-2: paire, 13: roi, 00: pas de 2e paire, 14: hauteur As, 10: 2e hauteur, 06: 3e hauteur, 00: 4e, 00: 5e
-score final unique = 213001410060000
+score = 1 13 00 14 10 06 00 00
+1: paire, 13: roi, 00: pas de 2e paire, 14: hauteur As, 10: 2e hauteur, 06: 3e hauteur, 00: 4e, 00: 5e
+score final unique = 113001410060000
 
 
 nécessite: __int64 score = 0;
