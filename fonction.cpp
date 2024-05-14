@@ -20,8 +20,8 @@ conbinaison: 0-8 (paire, carré, ...)
 7: carré
 8: quinte flush
 
-1e valeur combinaison (1-15) si carré carré de quoi ?
-2e valeur combinaison (1-15) si cas double paire ou full besoin 2 valeur
+1e valeur combinaison (1-14) si carré carré de quoi ?
+2e valeur combinaison (1-14) si cas double paire ou full besoin 2 valeur
 1e valeur hauteur
 2e valeur hauteur
 3e valeur hauteur
